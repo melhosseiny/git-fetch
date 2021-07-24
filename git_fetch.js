@@ -1,4 +1,4 @@
-addEventListener("fetch", (event) => {
+addEventListener("fetch", async (event) => {
   const url = new URL(event.request.url);
   const rawContent = await (await fetch(`https://raw.githubusercontent.com/${url.pathname}`)).text();
 
