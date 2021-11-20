@@ -1,14 +1,15 @@
-addEventListener("fetch", async (event) => {
-  const url = new URL(event.request.url);
-  const rawContent = await (await fetch(`https://raw.githubusercontent.com/${url.pathname}`)).text();
+import { serve } from "https://deno.land/std@0.115.1/http/server.ts";
+import { content_type } from "./media_types.js";
 
-  event.respondWith(
-    new Response(rawContent, {
+serve(async (request) => {
+  const { pathname } = new URL(request.url);
+  const rawContent = await (await fetch(`https://raw.githubusercontent.com/${pathname}`)).text();
+
+  return new Response(rawContent, {
       status: 200,
       headers: new Headers({
-        'Content-Type': url.pathname.endsWith(".css") ? "text/css" : "application/javascript",
+        'Content-Type': content_type(pathname),
         'Access-Control-Allow-Origin': "*"
       })
     })
-  );
 });
